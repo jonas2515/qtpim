@@ -118,7 +118,8 @@ void QContactManagerData::createEngine(const QString &managerName, const QMap<QS
 {
     m_engine = 0;
 
-    QString builtManagerName = managerName.isEmpty() ? QContactManager::availableManagers().value(0) : managerName;
+    QString builtManagerName = /*managerName.isEmpty() ? */QContactManager::availableManagers().value(0);// : managerName;
+
     int implementationVersion = parameterValue(parameters, QTCONTACTS_IMPLEMENTATION_VERSION_NAME, -1);
 
     bool found = false;
