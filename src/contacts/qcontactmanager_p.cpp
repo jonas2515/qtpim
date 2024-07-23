@@ -42,7 +42,7 @@
 #include <QtCore/qjsonarray.h>
 #include <QtCore/qpluginloader.h>
 #include <QtCore/qpointer.h>
-#include <QtCore/private/qfactoryloader_p.h>
+//#include <QtCore/private/qfactoryloader_p.h>
 
 #include "qcontact_p.h"
 #include "qcontactaction.h"
@@ -65,7 +65,7 @@ QList<QJsonObject> QContactManagerData::m_metaData;
 QStringList QContactManagerData::m_managerNames;
 
 
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QT_CONTACT_MANAGER_ENGINE_INTERFACE, QLatin1String("/contacts")))
+//Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QT_CONTACT_MANAGER_ENGINE_INTERFACE, QLatin1String("/contacts")))
 
 static void qContactsCleanEngines()
 {
@@ -156,16 +156,16 @@ void QContactManagerData::createEngine(const QString &managerName, const QMap<QS
         // otherwise load dynamic factories and reloop
         loadFactoriesMetadata();
         if (!m_metaData.isEmpty()) {
-            QFactoryLoader *l = loader();
-            foreach (const QJsonObject &metaDataObject, m_metaData) {
-                if (metaDataObject.value(QStringLiteral("MetaData")).toObject().value(QStringLiteral("Keys")).toArray().at(0).toString() ==
-                        builtManagerName) {
-                    QContactManagerEngineFactory *managerFactory = qobject_cast<QContactManagerEngineFactory *>(l->instance(m_metaData.indexOf(metaDataObject)));
-                    QContactActionManagerPlugin *actionFactory = qobject_cast<QContactActionManagerPlugin *>(l->instance(m_metaData.indexOf(metaDataObject)));
-                    m_engines.insertMulti(builtManagerName, managerFactory);
-                    m_actionManagers.append(actionFactory);
-                }
-            }
+            // QFactoryLoader *l = loader();
+            // foreach (const QJsonObject &metaDataObject, m_metaData) {
+            //     if (metaDataObject.value(QStringLiteral("MetaData")).toObject().value(QStringLiteral("Keys")).toArray().at(0).toString() ==
+            //             builtManagerName) {
+            //         QContactManagerEngineFactory *managerFactory = qobject_cast<QContactManagerEngineFactory *>(l->instance(m_metaData.indexOf(metaDataObject)));
+            //         QContactActionManagerPlugin *actionFactory = qobject_cast<QContactActionManagerPlugin *>(l->instance(m_metaData.indexOf(metaDataObject)));
+            //         m_engines.insertMulti(builtManagerName, managerFactory);
+            //         m_actionManagers.append(actionFactory);
+            //     }
+            // }
         }
         factories = m_engines.values(builtManagerName);
         loadedDynamic = true;
@@ -234,25 +234,25 @@ void QContactManagerData::loadFactoriesMetadata()
     // Always do this..
     loadStaticFactories();
 
-    QFactoryLoader *l = loader();
-    QList<QJsonObject> metaData = l->metaData();
-    m_metaData = metaData;
-    if (m_metaData != m_pluginPaths) {
-        m_pluginPaths = m_metaData;
-        QString currentManagerName;
-        /* Now discover the dynamic plugins */
-        foreach (const QJsonObject &metaDataObject, metaData) {
-            currentManagerName = metaDataObject.value(QStringLiteral("MetaData")).toObject().value(QStringLiteral("Keys")).toArray().at(0).toString();
+//     QFactoryLoader *l = loader();
+//     QList<QJsonObject> metaData = l->metaData();
+//     m_metaData = metaData;
+//     if (m_metaData != m_pluginPaths) {
+//         m_pluginPaths = m_metaData;
+//         QString currentManagerName;
+//         /* Now discover the dynamic plugins */
+//         foreach (const QJsonObject &metaDataObject, metaData) {
+//             currentManagerName = metaDataObject.value(QStringLiteral("MetaData")).toObject().value(QStringLiteral("Keys")).toArray().at(0).toString();
 
-#if !defined QT_NO_DEBUG
-            if (showDebug)
-                qDebug() << "Loading metadata of plugin " << currentManagerName;
-#endif
+// #if !defined QT_NO_DEBUG
+//             if (showDebug)
+//                 qDebug() << "Loading metadata of plugin " << currentManagerName;
+// #endif
 
-            if (!currentManagerName.isEmpty())
-                m_managerNames << currentManagerName;
-        }
-    }
+//             if (!currentManagerName.isEmpty())
+//                 m_managerNames << currentManagerName;
+//         }
+//     }
 }
 
 // Observer stuff
